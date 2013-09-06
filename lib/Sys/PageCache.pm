@@ -4,8 +4,8 @@ use strict;
 use warnings;
 use Carp;
 use base qw(Exporter);
-our @EXPORT = qw(fincore);
-our @EXPORT_OK = qw(_fincore);
+our @EXPORT = qw(fincore fadvise);
+our @EXPORT_OK = qw(_fincore _fadvise);
 
 our $VERSION = '0.01_001';
 
@@ -39,9 +39,37 @@ sub fincore {
     debugf("length: %llu", $length);
 
     my $r = _fincore($fd, $offset, $length);
+
     $r->{file_size}   = $fsize;
     $r->{total_pages} = ceil($fsize / $r->{page_size});
+
     return $r;
+}
+
+sub fadvise {
+    my($file, $offset, $length, $advice) = @_;
+
+    open my $fh, '<', $file or croak $!;
+    my $fd = fileno $fh;
+
+    if (! $offset) {
+        $offset = 0;
+    } elsif ($offset < 0) {
+        croak "offset must be >= 0";
+    }
+
+    my $fsize = (stat $file)[7];
+    if (! $length) {
+        $length = $fsize;
+    } elsif ($length > $fsize) {
+        warnf("length(%llu) is greater than file size(%uul). so use file size", $length, $fsize);
+        $length = $fsize;
+    }
+
+    debugf("offset: %llu", $offset);
+    debugf("length: %llu", $length);
+
+    return _fadvise($fd, $offset, $length, $advice);
 }
 
 1;

@@ -20,7 +20,7 @@ MODULE = Sys::PageCache     PACKAGE = Sys::PageCache
 HV*
 _fincore(fd, offset, length)
     int fd;
-    size_t offset; // fixme
+    size_t offset;
     size_t length;
   CODE:
     void *pa = (char *)0;
@@ -66,5 +66,31 @@ _fincore(fd, offset, length)
     hv_store(RETVAL, "page_size",     9, newSViv(page_size), 0);
     hv_store(RETVAL, "cached_pages", 12, newSViv(cached), 0);
     hv_store(RETVAL, "cached_size",  11, newSViv((unsigned long long)cached * page_size), 0);
+  OUTPUT:
+    RETVAL
+
+int
+_fadvise(fd, offset, length, advice)
+    int fd;
+    size_t offset;
+    size_t length;
+    int advice
+  CODE:
+    int r;
+
+    r = fdatasync(fd);
+    if (r != 0) {
+        // fixme
+        //fputs("(fdatasync failed) ", stderr);
+        //perror(fname);
+        perror("fdatasync");
+    }
+    r = posix_fadvise(fd, offset, length, POSIX_FADV_DONTNEED);//fixme
+    if (r != 0) {
+      fputs("(posix_fadvise failed) ", stderr);
+      perror("fadvise");
+    }
+
+    RETVAL = r;
   OUTPUT:
     RETVAL
