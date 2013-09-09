@@ -40,9 +40,15 @@ sub fincore {
     my $fsize = (stat $file)[7];
     if (! $length) {
         $length = $fsize;
-    } elsif ($length > $fsize) {
-        carp(sprintf "length(%llu) is greater than file size(%llu). so use file size", $length, $fsize);
-        $length = $fsize;
+    } elsif ($length > $fsize - $offset) {
+        my $new_length = $fsize - $offset;
+        carp(sprintf "[WARN] fincore: length(%llu) is greater than file size(%llu) - offset(%llu). so use file size - offset (=%llu)",
+             $length,
+             $fsize,
+             $offset,
+             $new_length,
+         );
+        $length = $new_length;
     }
 
     my $r = _fincore($fd, $offset, $length);
@@ -64,9 +70,15 @@ sub fadvise {
     croak "offset must be >= 0" if $offset < 0;
 
     my $fsize = (stat $file)[7];
-    if ($length > $fsize) {
-        carp(sprintf "[WARN] length(%llu) is greater than file size(%llu). so use file size", $length, $fsize);
-        $length = $fsize;
+    if ($length > $fsize - $offset) {
+        my $new_length = $fsize - $offset;
+        carp(sprintf "[WARN] fadvise: length(%llu) is greater than file size(%llu) - offset(%llu). so use file size - offset (=%llu)",
+             $length,
+             $fsize,
+             $offset,
+             $new_length,
+         );
+        $length = $new_length;
     }
 
     open my $fh, '<', $file or croak $!;
