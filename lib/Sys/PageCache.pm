@@ -15,7 +15,6 @@ use Log::Minimal;
 require XSLoader;
 XSLoader::load(__PACKAGE__, $VERSION);
 
-# fixme offset must be a multiple of the page size
 sub fincore {
     my($file, $offset, $length) = @_;
 
@@ -26,6 +25,10 @@ sub fincore {
         $offset = 0;
     } elsif ($offset < 0) {
         croak "offset must be >= 0";
+    } elsif (($offset % page_size()) != 0) {
+        my $new_offset = page_size() * int($offset % page_size());
+        carp "offset must be a multiple of the page size so change $offset to $new_offset";
+        $offset = $new_offset;
     }
 
     my $fsize = (stat $file)[7];
