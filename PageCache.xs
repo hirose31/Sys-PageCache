@@ -17,6 +17,17 @@ extern "C" {
 
 MODULE = Sys::PageCache     PACKAGE = Sys::PageCache
 
+BOOT:
+{
+    HV *stash = gv_stashpv ("Sys::PageCache", 0);
+    newCONSTSUB (stash, "POSIX_FADV_NORMAL"    , newSViv (POSIX_FADV_NORMAL));
+    newCONSTSUB (stash, "POSIX_FADV_SEQUENTIAL", newSViv (POSIX_FADV_SEQUENTIAL));
+    newCONSTSUB (stash, "POSIX_FADV_RANDOM"    , newSViv (POSIX_FADV_RANDOM));
+    newCONSTSUB (stash, "POSIX_FADV_NOREUSE"   , newSViv (POSIX_FADV_NOREUSE));
+    newCONSTSUB (stash, "POSIX_FADV_WILLNEED"  , newSViv (POSIX_FADV_WILLNEED));
+    newCONSTSUB (stash, "POSIX_FADV_DONTNEED"  , newSViv (POSIX_FADV_DONTNEED));
+}
+
 int
 page_size()
   CODE:

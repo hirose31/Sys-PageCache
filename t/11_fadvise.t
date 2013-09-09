@@ -21,6 +21,10 @@ is(ref($r), 'HASH', 'return value is hashref');
 is($r->{total_pages},  $pages+1, "total pages");
 is($r->{cached_pages}, $pages+1, "cached pages");
 
+my $advice = POSIX_FADV_DONTNEED;
+ok(defined $advice, "POSIX_FADV_DONTNEED defined");
+ok($advice > 0, "POSIX_FADV_DONTNEED > 0");
+
 $r = fadvise $filename;
 
 is($r, 0, "return value of fadvise");
