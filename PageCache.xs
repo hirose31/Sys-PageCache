@@ -17,6 +17,13 @@ extern "C" {
 
 MODULE = Sys::PageCache     PACKAGE = Sys::PageCache
 
+int
+page_size()
+  CODE:
+    RETVAL = sysconf(_SC_PAGESIZE);
+  OUTPUT:
+    RETVAL
+
 HV*
 _fincore(fd, offset, length)
     int fd;
@@ -25,7 +32,7 @@ _fincore(fd, offset, length)
   CODE:
     void *pa = (char *)0;
     unsigned char *vec = (unsigned char *)0;
-    size_t page_size = getpagesize();
+    size_t page_size = sysconf(_SC_PAGESIZE);
     size_t page_index;
     size_t cached = 0;
 

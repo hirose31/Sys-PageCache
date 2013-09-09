@@ -4,8 +4,8 @@ use strict;
 use warnings;
 use Carp;
 use base qw(Exporter);
-our @EXPORT = qw(fincore fadvise);
-our @EXPORT_OK = qw(_fincore _fadvise);
+our @EXPORT = qw(page_size fincore fadvise);
+our @EXPORT_OK = qw();
 
 our $VERSION = '0.01_001';
 
