@@ -15,6 +15,7 @@ use Log::Minimal;
 require XSLoader;
 XSLoader::load(__PACKAGE__, $VERSION);
 
+# fixme offset must be a multiple of the page size
 sub fincore {
     my($file, $offset, $length) = @_;
 
