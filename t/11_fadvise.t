@@ -25,7 +25,7 @@ my $advice = POSIX_FADV_DONTNEED;
 ok(defined $advice, "POSIX_FADV_DONTNEED defined");
 ok($advice > 0, "POSIX_FADV_DONTNEED > 0");
 
-$r = fadvise $filename;
+$r = fadvise $filename, 0, 0, POSIX_FADV_DONTNEED;
 
 is($r, 0, "return value of fadvise");
 

@@ -15,7 +15,7 @@ diag "tempfile: $filename";
 
 my $r;
 
-$r = fadvise $filename;
+$r = fadvise $filename, 0, 0, POSIX_FADV_DONTNEED;
 $r = fincore $filename;
 my $file_size = $r->{file_size};
 

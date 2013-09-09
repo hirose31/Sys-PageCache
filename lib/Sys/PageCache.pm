@@ -17,7 +17,6 @@ our @EXPORT_OK = qw();
 our $VERSION = '0.01_001';
 
 use POSIX;
-use Log::Minimal;
 
 require XSLoader;
 XSLoader::load(__PACKAGE__, $VERSION);
@@ -42,12 +41,9 @@ sub fincore {
     if (! $length) {
         $length = $fsize;
     } elsif ($length > $fsize) {
-        warnf("length(%llu) is greater than file size(%uul). so use file size", $length, $fsize);
+        carp(sprintf "length(%llu) is greater than file size(%llu). so use file size", $length, $fsize);
         $length = $fsize;
     }
-
-    debugf("offset: %llu", $offset);
-    debugf("length: %llu", $length);
 
     my $r = _fincore($fd, $offset, $length);
 
@@ -60,25 +56,21 @@ sub fincore {
 sub fadvise {
     my($file, $offset, $length, $advice) = @_;
 
-    open my $fh, '<', $file or croak $!;
-    my $fd = fileno $fh;
+    croak "missing advice" unless defined $advice;
+    croak "missing length" unless defined $length;
+    croak "missing offset" unless defined $offset;
+    croak "missing file"   unless defined $file;
 
-    if (! $offset) {
-        $offset = 0;
-    } elsif ($offset < 0) {
-        croak "offset must be >= 0";
-    }
+    croak "offset must be >= 0" if $offset < 0;
 
     my $fsize = (stat $file)[7];
-    if (! $length) {
-        $length = $fsize;
-    } elsif ($length > $fsize) {
-        warnf("length(%llu) is greater than file size(%uul). so use file size", $length, $fsize);
+    if ($length > $fsize) {
+        carp(sprintf "[WARN] length(%llu) is greater than file size(%llu). so use file size", $length, $fsize);
         $length = $fsize;
     }
 
-    debugf("offset: %llu", $offset);
-    debugf("length: %llu", $length);
+    open my $fh, '<', $file or croak $!;
+    my $fd = fileno $fh;
 
     return _fadvise($fd, $offset, $length, $advice);
 }
