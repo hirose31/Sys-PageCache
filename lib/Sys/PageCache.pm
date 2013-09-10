@@ -31,10 +31,15 @@ sub fincore {
         $offset = 0;
     } elsif ($offset < 0) {
         croak "offset must be >= 0";
-    } elsif (($offset % page_size()) != 0) {
-        my $new_offset = page_size() * int($offset % page_size());
-        carp "offset must be a multiple of the page size so change $offset to $new_offset";
-        $offset = $new_offset;
+    } else {
+        my $pa_offset = $offset & ~(page_size() - 1);
+        if ($pa_offset != $offset) {
+            carp(sprintf "[WARN] offset must be a multiple of the page size so change %llu to %llu",
+                 $offset,
+                 $pa_offset,
+             );
+            $offset = $pa_offset;
+        }
     }
 
     my $fsize = (stat $file)[7];
