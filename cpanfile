@@ -1,16 +1,17 @@
-# -*- mode: cperl -*-
+requires 'perl', '5.010001';
 
-requires 'Foo', '== 0.1';        # specific version
-requires 'Foo', '0.1';           # minimum
-requires 'Bar', '>= 0.1, < 0.4'; # min-max
-
-# phase: configure, build, test, runtime(default), develop
 on configure => sub {
-    requires 'Module::Install';
-    requires 'Module::Install::CPANfile';
+    requires 'ExtUtils::MakeMaker', '6.30';
 };
 
-on 'test' => sub {
+on test => sub {
+    requires 'File::Temp';
     requires 'Test::More';
-    requires 'Devel::Cover';
+    requires 'Test::Output';
+    requires 'parent';
+};
+
+on develop => sub {
+    requires 'Test::LeakTrace';
+    requires 'Test::Perl::Critic';
 };
