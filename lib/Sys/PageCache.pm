@@ -24,9 +24,6 @@ XSLoader::load(__PACKAGE__, $VERSION);
 sub fincore {
     my($file, $offset, $length) = @_;
 
-    open my $fh, '<', $file or croak $!;
-    my $fd = fileno $fh;
-
     if (! $offset) {
         $offset = 0;
     } elsif ($offset < 0) {
@@ -56,6 +53,9 @@ sub fincore {
         $length = $new_length;
     }
 
+    open my $fh, '<', $file or croak $!;
+    my $fd = fileno $fh;
+
     my($r, $e);
     {
         local $@;
@@ -64,6 +64,8 @@ sub fincore {
         };
         chomp($e = $@) if $@;
     }
+    close $fh;
+
     if (defined $e) {
         carp $e;
         return;
@@ -108,6 +110,8 @@ sub fadvise {
         };
         chomp($e = $@) if $@;
     }
+    close $fh;
+
     if (defined $e) {
         carp $e;
         return;
