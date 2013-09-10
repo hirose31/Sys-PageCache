@@ -125,21 +125,93 @@ __END__
 
 =head1 NAME
 
-Sys::PageCache -
+Sys::PageCache - handling page cache related on files
 
 =head1 SYNOPSIS
 
-  use Sys::PageCache;
+    use Sys::PageCache;
+    
+    # determine whether pages are redident in memory
+    $r = fincore "/path/to/file";
+    printf("cached/total_size=%llu/%llu cached/total_pages=%llu/%llu\n",
+           $r->{cached_size}, $r->{file_size},
+           $r->{cached_pages}, $r->{total_pages},
+       );
+    
+    # free cached pages on a file
+    $r = fadvise "/path/to/file", 0, 0, POSIX_FADV_DONTNEED;
 
 =head1 DESCRIPTION
 
-Sys::PageCache is
+Sys::PageCache is for handling page cache related on files.
+
+=head1 METHODS
+
+=over 4
+
+=item B<fincore>($filepath:Str [, $offset:Int [, $length:Int]])
+
+Determine whether pages are redident in memory.
+C<$offset> and C<$length> are optional.
+
+C<fincore> returns a following hash ref.
+
+    {
+       cached_pages => Int, # number of cached pages
+       cached_size  => Int, # size of cached pages
+       total_pages  => Int, # number of pages if cached whole file
+       file_size    => Int, # size of file
+       page_size    => Int, # page size on your system
+    }
+
+
+=item B<fadvise>($filepath:Str, $offset:Int, $length:Int, $advice:Int)
+
+Call posix_fadvise(2).
+
+C<fadvise> returns 1 if success.
+
+=back
+
+=head1 EXPORTS
+
+=over 4
+
+=item fincore
+
+=item fadvise
+
+=item POSIX_FADV_NORMAL
+
+=item POSIX_FADV_SEQUENTIAL
+
+=item POSIX_FADV_RANDOM
+
+=item POSIX_FADV_NOREUSE
+
+=item POSIX_FADV_WILLNEED
+
+=item POSIX_FADV_DONTNEED
+
+=back
 
 =head1 AUTHOR
 
 HIROSE Masaaki E<lt>hirose31 _at_ gmail.comE<gt>
 
+=head1 REPOSITORY
+
+L<https://github.com/hirose31/Sys-PageCache>
+
+  git clone git://github.com/hirose31/Sys-PageCache.git
+
+patches and collaborators are welcome.
+
 =head1 SEE ALSO
+
+mincore(2), posix_fadvise(2),
+L<https://code.google.com/p/linux-ftools/>,
+L<https://github.com/nhayashi/pagecache-tool>
 
 =head1 LICENSE
 
