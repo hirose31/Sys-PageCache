@@ -56,7 +56,18 @@ sub fincore {
         $length = $new_length;
     }
 
-    my $r = _fincore($fd, $offset, $length);
+    my($r, $e);
+    {
+        local $@;
+        $r = eval {
+            _fincore($fd, $offset, $length);
+        };
+        chomp($e = $@) if $@;
+    }
+    if (defined $e) {
+        carp $e;
+        return;
+    }
 
     $r->{file_size}   = $fsize;
     $r->{total_pages} = ceil($fsize / $r->{page_size});
@@ -89,7 +100,20 @@ sub fadvise {
     open my $fh, '<', $file or croak $!;
     my $fd = fileno $fh;
 
-    return _fadvise($fd, $offset, $length, $advice);
+    my($r, $e);
+    {
+        local $@;
+        $r = eval {
+            _fadvise($fd, $offset, $length, $advice);
+        };
+        chomp($e = $@) if $@;
+    }
+    if (defined $e) {
+        carp $e;
+        return;
+    }
+
+    return $r == 0 ? 1 : ();
 }
 
 1;

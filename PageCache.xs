@@ -51,29 +51,23 @@ _fincore(fd, offset, length)
 
     pa = mmap((void *)0, length, PROT_NONE, MAP_SHARED, fd, offset);
     if (pa == MAP_FAILED) {
-        perror("mmap");
-        exit(EXIT_FAILURE); // fixme
+        croak("mmap: %s", strerror(errno));
     }
 
     vec = calloc(1, (length + page_size - 1) / page_size);
     if (vec == NULL) {
-        perror("calloc");
-        exit(EXIT_FAILURE); // fixme
+        munmap(pa, length);
+        croak("calloc: %s", strerror(errno));
     }
 
     if (mincore(pa, length, vec) != 0) {
-        perror("mincore");
-        exit(EXIT_FAILURE); // fixme
-  //        fprintf(stderr, "mincore(%p, %llu, %p): %s\n",
-  //                pa, (unsigned long long)off_limit, vec, strerror(errno));
-  //        free(vec);
-  //        close(fd);
-  //        exit(EXIT_FAILURE);
+        free(vec);
+        munmap(pa, length);
+        croak("mincore: %s", strerror(errno));
     }
 
     for (page_index = 0; page_index <= length / page_size; page_index++) {
         if (vec[page_index] & 1) {
-            //printf("%lu\n", (unsigned long)page_index);
             cached++;
         }
     }
@@ -98,15 +92,11 @@ _fadvise(fd, offset, length, advice)
 
     r = fdatasync(fd);
     if (r != 0) {
-        // fixme
-        //fputs("(fdatasync failed) ", stderr);
-        //perror(fname);
-        perror("fdatasync");
+        croak("fdatasync: %s", strerror(errno));
     }
-    r = posix_fadvise(fd, offset, length, POSIX_FADV_DONTNEED);//fixme
+    r = posix_fadvise(fd, offset, length, advice);
     if (r != 0) {
-      fputs("(posix_fadvise failed) ", stderr);
-      perror("fadvise");
+        croak("posix_fadvise: %s", strerror(errno));
     }
 
     RETVAL = r;

@@ -27,7 +27,7 @@ ok($advice > 0, "POSIX_FADV_DONTNEED > 0");
 
 $r = fadvise $filename, 0, 0, POSIX_FADV_DONTNEED;
 
-is($r, 0, "return value of fadvise");
+is($r, 1, "return value of fadvise");
 
 $r = fincore $filename;
 
