@@ -13,9 +13,10 @@ my %WriteMakefileArgs = (
         "ExtUtils::MakeMaker" => "6.30"
     },
     "DISTNAME" => "Sys-PageCache",
-    # "EXE_FILES" => [
-    #     "bin/fixme"
-    # ],
+    "EXE_FILES" => [
+        "bin/pagecache-check.pl",
+        "bin/pagecache-clear.pl",
+    ],
     "LICENSE" => "perl",
     "NAME" => "Sys::PageCache",
     "PREREQ_PM" => {
@@ -28,11 +29,9 @@ my %WriteMakefileArgs = (
     "test" => {
         "TESTS" => "t/*.t"
     },
-    LIBS   => [''], # e.g., '-lm'
-    DEFINE => '',       # e.g., '-DHAVE_SOMETHING'
-    INC    => '-I.',    # e.g., '-I. -I/usr/include/other'
-    # Un-comment this if you add C files to link with later:
-    # OBJECT => '$(O_FILES)', # link all the C files too
+    LIBS   => [''],
+    DEFINE => '',
+    INC    => '-I.',
 );
 
 
