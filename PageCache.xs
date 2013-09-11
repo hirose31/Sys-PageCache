@@ -89,8 +89,11 @@ _fadvise(fd, offset, length, advice)
     int advice
   CODE:
     int r;
-
+#if linux
     r = fdatasync(fd);
+#else
+    r = fsync(fd);
+#endif
     if (r != 0) {
         croak("fdatasync: %s", strerror(errno));
     }
