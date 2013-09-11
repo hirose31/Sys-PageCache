@@ -2,6 +2,7 @@ package Sys::PageCache;
 
 use strict;
 use warnings;
+use 5.008001;
 use Carp;
 use base qw(Exporter);
 our @EXPORT = qw(page_size fincore fadvise
