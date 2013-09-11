@@ -5,6 +5,21 @@ use 5.008001;
 
 use ExtUtils::MakeMaker 6.30;
 
+if ($^O =~ /linux/) {
+    ; # OK
+} elsif ($^O =~ /freebsd/) {
+    my($osver) = (qx(uname -r) =~ /^([0-9.]+)/);
+    if (defined $osver && $osver >= 8.3) {
+        ; # OK
+    } else {
+        print "Only support FreeBSD >= 8.3 because of lack of posix_fadvise(2)\n";
+        exit 0;
+    }
+} else {
+    print "No support for your OS\n";
+    exit 0;
+}
+
 my %WriteMakefileArgs = (
     "ABSTRACT_FROM" => "lib/Sys/PageCache.pm",
     "AUTHOR" => "HIROSE Masaaki",
