@@ -123,9 +123,31 @@ sub fadvise {
 1;
 __END__
 
+=encoding utf-8
+
+=begin html
+
+<a href="https://travis-ci.org/hirose31/Sys-PageCache"><img src="https://travis-ci.org/hirose31/Sys-PageCache.png?branch=master" alt="Build Status" /></a>
+<a href="https://coveralls.io/r/hirose31/Sys-PageCache?branch=master"><img src="https://coveralls.io/repos/hirose31/Sys-PageCache/badge.png?branch=master" alt="Coverage Status" /></a>
+
+=end html
+
 =head1 NAME
 
 Sys::PageCache - handling page cache related on files
+
+=begin readme
+
+=head1 INSTALLATION
+
+To install this module, run the following commands:
+
+    perl Makefile.PL
+    make
+    make test
+    make install
+
+=end readme
 
 =head1 SYNOPSIS
 
