@@ -1,5 +1,9 @@
 Revision history for Sys::PageCache
 
+0.02  2013-09-13
+    [IMPROVEMENTS]
+        - Initial release
+
 0.01_002  2013-09-11
     [IMPROVEMENTS]
         - Support FreeBSD >= 8.3
