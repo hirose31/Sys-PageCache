@@ -1,4 +1,6 @@
-requires 'perl', '5.010001';
+requires 'Getopt::Long';
+requires 'Pod::Usage';
+requires 'perl', '5.008001';
 
 on configure => sub {
     requires 'ExtUtils::MakeMaker', '6.30';

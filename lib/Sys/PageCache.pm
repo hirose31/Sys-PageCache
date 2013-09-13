@@ -154,7 +154,7 @@ To install this module, run the following commands:
 
     use Sys::PageCache;
     
-    # determine whether pages are redident in memory
+    # determine whether pages are resident in memory
     $r = fincore "/path/to/file";
     printf("cached/total_size=%llu/%llu cached/total_pages=%llu/%llu\n",
            $r->{cached_size}, $r->{file_size},
@@ -174,7 +174,7 @@ Sys::PageCache is for handling page cache related on files.
 
 =item B<fincore>($filepath:Str [, $offset:Int [, $length:Int]])
 
-Determine whether pages are redident in memory.
+Determine whether pages are resident in memory.
 C<$offset> and C<$length> are optional.
 
 C<fincore> returns a following hash ref.
@@ -193,6 +193,10 @@ C<fincore> returns a following hash ref.
 Call posix_fadvise(2).
 
 C<fadvise> returns 1 if success.
+
+=item B<page_size>()
+
+Returns size of page size on your system.
 
 =back
 

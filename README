@@ -12,7 +12,7 @@ INSTALLATION
 SYNOPSIS
         use Sys::PageCache;
     
-        # determine whether pages are redident in memory
+        # determine whether pages are resident in memory
         $r = fincore "/path/to/file";
         printf("cached/total_size=%llu/%llu cached/total_pages=%llu/%llu\n",
                $r->{cached_size}, $r->{file_size},
@@ -27,7 +27,7 @@ DESCRIPTION
 
 METHODS
     fincore($filepath:Str [, $offset:Int [, $length:Int]])
-        Determine whether pages are redident in memory. `$offset' and
+        Determine whether pages are resident in memory. `$offset' and
         `$length' are optional.
 
         `fincore' returns a following hash ref.
@@ -44,6 +44,9 @@ METHODS
         Call posix_fadvise(2).
 
         `fadvise' returns 1 if success.
+
+    page_size()
+        Returns size of page size on your system.
 
 EXPORTS
     fincore

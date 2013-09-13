@@ -12,3 +12,5 @@ Emacsen
 et
 paren
 utf
+fadvise
+fincore
