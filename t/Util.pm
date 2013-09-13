@@ -3,7 +3,7 @@ package t::Util;
 use strict;
 use warnings;
 
-use parent qw(Exporter);
+use base qw(Exporter);
 our @EXPORT = qw(p);
 
 use IO::File;

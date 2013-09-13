@@ -38,7 +38,9 @@ my %WriteMakefileArgs = (
         "Pod::Usage" => "1.36",
     },
     "TEST_REQUIRES" => {
-        "Test::More" => 0
+        "File::Temp"   => 0,
+        "Test::More"   => 0,
+        "Test::Output" => 0,
     },
     "VERSION_FROM" => "lib/Sys/PageCache.pm",
     "test" => {

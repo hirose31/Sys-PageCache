@@ -8,7 +8,6 @@ on test => sub {
     requires 'File::Temp';
     requires 'Test::More';
     requires 'Test::Output';
-    requires 'parent';
 };
 
 on develop => sub {
