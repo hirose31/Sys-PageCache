@@ -15,7 +15,7 @@ our @EXPORT = qw(page_size fincore fadvise
             );
 our @EXPORT_OK = qw();
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 use POSIX;
 
