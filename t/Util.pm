@@ -10,15 +10,15 @@ use IO::File;
 use File::Temp qw(tempfile);
 use Data::Dumper;
 
-sub p($) {
+sub p(@) { ## no critic
     local $Data::Dumper::Indent    = 1;
     local $Data::Dumper::Deepcopy  = 1;
     local $Data::Dumper::Sortkeys  = 1;
     local $Data::Dumper::Terse     = 1;
-    local $Data::Dumper::Useqq     = 1;
+    local $Data::Dumper::Useqq     = 0;
     local $Data::Dumper::Quotekeys = 0;
-    my $d =  Dumper($_[0]);
-    $d    =~ s/\\x{([0-9a-z]+)}/chr(hex($1))/ge;
+    my $d =  Dumper(\@_);
+    $d =~ s/\\x\{([0-9a-z]+)\}/chr(hex($1))/ge;
     print STDERR $d;
 }
 
