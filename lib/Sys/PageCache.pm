@@ -19,7 +19,7 @@ our $VERSION = '0.05';
 
 our $MAX_CHUNK_SIZE = 512*1024*1024;
 
-use POSIX;
+use POSIX qw(ceil);
 
 require XSLoader;
 XSLoader::load(__PACKAGE__, $VERSION);
