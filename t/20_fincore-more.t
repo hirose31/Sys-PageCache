@@ -13,7 +13,7 @@ use Fcntl qw(:seek);
 
 my $page_size = sysconf(_SC_PAGESIZE);
 diag "page_size: $page_size";
-my $pages = 8;
+my $pages = 32;
 
 my($fh, $filename) = t::Util::create_tempfile(size => $page_size * $pages + 1024);
 diag "tempfile: $filename";
@@ -36,7 +36,7 @@ $r = fincore $filename;
 is($r->{total_pages},  $pages+1, "total pages");
 ok($r->{cached_pages} < $pages+1, "cached pages $r->{cached_pages} < $pages + 1");
 
-my $offset = $r->{cached_pages} * $page_size + $page_size;
+my $offset = $r->{cached_pages} * $page_size + $page_size * 16;
 diag "offset: $offset";
 $r = fincore $filename, $offset, $file_size-$offset;
 
